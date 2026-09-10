@@ -11,6 +11,12 @@ export default function App() {
     const handleGlobalRedirect = async () => {
       try {
         await msalInstance.initialize();
+
+        // 1. Verificar inmediatamente si la URL trae un hash/código de Microsoft Entra ID
+        const hasAuthParams = window.location.hash.includes('code=') || 
+                              window.location.hash.includes('error=') ||
+                              window.location.hash.includes('id_token=');
+
         const response = await msalInstance.handleRedirectPromise();
 
         if (response && response.account) {
@@ -27,14 +33,18 @@ export default function App() {
               username: response.account.username
             }));
 
-            // Redirección inmediata sin renderizar rutas intermedias
+            // Redirección inmediata usando replace para no guardar la URL intermedia en el historial
             window.location.replace(`https://benjaminfredes.github.io/MedicTime-Fronted-Administrador-/?token=${encodeURIComponent(tokenResult.accessToken)}&user=${userData}`);
             return;
           }
         }
+
+        // Si no veníamos de una redirección de autenticación, dejamos pasar a la app
+        if (!hasAuthParams) {
+          setIsProcessingAuth(false);
+        }
       } catch (error) {
         console.error('❌ Error procesando respuesta de MSAL:', error);
-      } finally {
         setIsProcessingAuth(false);
       }
     };
@@ -42,7 +52,7 @@ export default function App() {
     handleGlobalRedirect();
   }, []);
 
-  // Mientras valida el token, mostramos una pantalla oscura suave para evitar parpadeos de la interfaz
+  // Si estamos procesando el login (o redirigiendo), NUNCA renderizamos HashRouter ni AppRouter
   if (isProcessingAuth) {
     return (
       <div className="min-h-screen bg-slate-900 text-slate-300 flex flex-col items-center justify-center space-y-4 font-sans">
