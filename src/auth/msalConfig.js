@@ -2,7 +2,9 @@ import { PublicClientApplication } from '@azure/msal-browser';
 
 const clientId = import.meta.env.VITE_CLIENT_ID || "9b818c2c-efc8-487d-9610-5dd0d940f18b";
 const tenantId = import.meta.env.VITE_TENANT_ID || "12d06913-6cce-486f-a7a4-d6202dc5bf6a";
-const redirectUri = import.meta.env.VITE_REDIRECT_URI || "https://BenjaminFredes.github.io/MedicTime-Fronted/";
+
+// Apuntamos explícitamente a la ruta /#/login
+const redirectUri = import.meta.env.VITE_REDIRECT_URI || "https://BenjaminFredes.github.io/MedicTime-Fronted/#/login";
 
 export const msalConfig = {
   auth: {
@@ -10,7 +12,6 @@ export const msalConfig = {
     authority: `https://login.microsoftonline.com/${tenantId}`,
     redirectUri: redirectUri,
     postLogoutRedirectUri: redirectUri,
-    navigateToLoginRequestUrl: false, // <--- DESACTIVA EL RETORNO AUTOMÁTICO A LA RAÍZ
   },
   cache: {
     cacheLocation: "localStorage",

@@ -51,12 +51,9 @@ export default function Login() {
     try {
       setStatusMsg('Conectando con Microsoft Entra ID...');
       await instance.initialize();
-      
-      // Forzamos la selección de cuenta y especificamos la ruta de retorno exacta
       await instance.loginRedirect({
         ...loginRequest,
-        prompt: 'select_account',
-        redirectStartPage: `${window.location.origin}/MedicTime-Fronted/#/login`
+        prompt: 'select_account'
       });
     } catch (error) {
       console.error('ERROR AL INICIAR SESIÓN:', error);
