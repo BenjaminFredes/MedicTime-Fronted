@@ -10,6 +10,7 @@ export const msalConfig = {
     authority: `https://login.microsoftonline.com/${tenantId}`,
     redirectUri: redirectUri,
     postLogoutRedirectUri: redirectUri,
+    navigateToLoginRequestUrl: false, // <--- DESACTIVA EL RETORNO AUTOMÁTICO A LA RAÍZ
   },
   cache: {
     cacheLocation: "localStorage",
