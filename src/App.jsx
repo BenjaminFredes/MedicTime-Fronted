@@ -27,8 +27,8 @@ export default function App() {
               username: response.account.username
             }));
 
-            // Redirección inmediata al Dashboard de Administración
-            window.location.href = `https://benjaminfredes.github.io/MedicTime-Fronted-Administrador-/?token=${encodeURIComponent(tokenResult.accessToken)}&user=${userData}`;
+            // Redirección inmediata sin renderizar rutas intermedias
+            window.location.replace(`https://benjaminfredes.github.io/MedicTime-Fronted-Administrador-/?token=${encodeURIComponent(tokenResult.accessToken)}&user=${userData}`);
             return;
           }
         }
@@ -42,10 +42,12 @@ export default function App() {
     handleGlobalRedirect();
   }, []);
 
+  // Mientras valida el token, mostramos una pantalla oscura suave para evitar parpadeos de la interfaz
   if (isProcessingAuth) {
     return (
-      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center font-sans">
-        <p className="animate-pulse">Autenticando y conectando con el sistema...</p>
+      <div className="min-h-screen bg-slate-900 text-slate-300 flex flex-col items-center justify-center space-y-4 font-sans">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm font-medium tracking-wide">Iniciando sesión segura...</p>
       </div>
     );
   }
