@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 // Configuración de Vite para MEDICTIME
 export default defineConfig({
   plugins: [react()],
+  base: '/MedicTime-Fronted/',
   server: {
     port: 3000,
     open: true
