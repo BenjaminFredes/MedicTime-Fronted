@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, Lock, ArrowLeft, Shield } from 'lucide-react';
 import { useMsal } from '@azure/msal-react';
@@ -9,43 +9,6 @@ export default function Login() {
   const navigate = useNavigate();
   const { instance } = useMsal();
   const [statusMsg, setStatusMsg] = useState('');
-
-  useEffect(() => {
-    const handleAuthRedirect = async () => {
-      try {
-        await instance.initialize();
-        const response = await instance.handleRedirectPromise();
-
-        if (response && response.account) {
-          instance.setActiveAccount(response.account);
-          
-          const tokenResult = await instance.acquireTokenSilent({
-            ...loginRequest,
-            account: response.account
-          });
-
-          if (tokenResult?.accessToken) {
-            setStatusMsg('Login correcto. Redirigiendo a la plataforma administradora...');
-            
-            const userData = encodeURIComponent(JSON.stringify({
-              name: response.account.name,
-              username: response.account.username
-            }));
-
-            // Redirección al Frontend 2 en GitHub Pages
-            setTimeout(() => {
-              window.location.href = `https://benjaminfredes.github.io/MedicTime-Fronted-Administrador-/?token=${encodeURIComponent(tokenResult.accessToken)}&user=${userData}`;
-            }, 1000);
-          }
-        }
-      } catch (error) {
-        console.error('❌ Error en redirección MSAL:', error);
-        setStatusMsg(`Error: ${error?.message || 'Error de autenticación'}`);
-      }
-    };
-
-    handleAuthRedirect();
-  }, [instance]);
 
   const handleLogin = async () => {
     try {
